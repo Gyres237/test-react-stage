@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 // On définit le nombre d'articles par page dans une constante pour pouvoir la réutiliser.
 const POSTS_PER_PAGE = 10;
@@ -53,7 +54,9 @@ const PostList = () => {
       {loading && <div className="loader">Mise à jour...</div>}
       <ul>
         {posts.map(post => (
-          <li key={post.id}>{post.title}</li>
+          <li key={post.id}>
+            <Link to={`/posts/${post.id}`}>{post.title}</Link>
+            </li>
         ))}
       </ul>
 
