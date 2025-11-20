@@ -6,13 +6,30 @@ import { AuthProvider } from './context/AuthContext';
 import App from './App.jsx';
 import PostDetail from './components/PostDetail.jsx';
 import LoginPage from './components/LoginPage.jsx';
+import PrivateRoute from './components/PrivateRoute.jsx'; 
 import './index.css';
 
 const router = createBrowserRouter([
-  
-  { path: "/", element: <App /> },
-  { path: "/posts/:postId", element: <PostDetail /> },
-  { path: "/login", element: <LoginPage /> },
+  // Routes publiques
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/",
+    element: <App />,
+  },
+  // Routes protégées
+  {
+    element: <PrivateRoute />, 
+    children: [ 
+      {
+        path: "/posts/:postId",
+        element: <PostDetail />,
+      },
+
+    ],
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
