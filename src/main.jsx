@@ -5,12 +5,14 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext'; 
 import App from './App.jsx';
 import PostDetail from './components/PostDetail.jsx';
+import LoginPage from './components/LoginPage.jsx';
 import './index.css';
 
 const router = createBrowserRouter([
   
   { path: "/", element: <App /> },
   { path: "/posts/:postId", element: <PostDetail /> },
+  { path: "/login", element: <LoginPage /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
