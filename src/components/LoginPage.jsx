@@ -5,24 +5,46 @@ import { useNavigate } from 'react-router-dom';
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+ 
+  const [errors, setErrors] = useState({});
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault(); 
+  const validateForm = () => {
+    const newErrors = {};
 
-    // Logique de validation très simple
+    if (!email) {
+      newErrors.email = "L'email est requis.";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Le format de l'email est invalide.";
+    }
+
+    if (!password) {
+      newErrors.password = 'Le mot de passe est requis.';
+    } else if (password.length < 8) {
+      newErrors.password = 'Le mot de passe doit contenir au moins 8 caractères.';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    
+    if (!validateForm()) {
+      return; 
+    }
+
+    
     if (email === 'user@example.com' && password === 'password123') {
-     
-      // Pour notre simulation, on crée un faux token.
       const fakeToken = '12345abcdef';
       login(fakeToken);
-      
-      // On redirige l'utilisateur vers la page d'accueil après connexion.
-      navigate('/'); 
+      navigate('/');
     } else {
-      setError('Email ou mot de passe incorrect.');
+   
+      setErrors({ form: 'Email ou mot de passe incorrect.' });
     }
   };
 
@@ -37,23 +59,23 @@ const LoginPage = () => {
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
+          {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
         </div>
         <div>
           <label htmlFor="password">Mot de passe :</label>
           <input
             type="password"
-            id="password"
+            id= "password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
+          {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
         </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {errors.form && <p style={{ color: 'red' }}>{errors.form}</p>}
         <button type="submit">Se connecter</button>
       </form>
-      <p>Utilisez <strong>user@example.com</strong> et <strong>password123</strong> pour vous connecter.</p>
+      <p>Utilisez <strong>user@example.com</strong> et <strong>password123</strong> (mot de passe d'au moins 8 caractères).</p>
     </div>
   );
 };
