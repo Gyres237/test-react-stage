@@ -11,7 +11,7 @@ Pour faire fonctionner ce projet en local, suivez les étapes ci-dessous.
 - npm
 
 ### Étapes d'installation
-1. Clonez le dépôt (nous ajouterons cette commande plus tard).
+1. Clonez le dépôt ( git clone ghttps://github.com/Gyres237/test-react-stage.git)
 2. Naviguez jusqu'au répertoire du projet :
    ```bash
    cd app-react
