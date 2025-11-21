@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import PostList from './components/PostList';
+import ThemeToggleButton from './components/ThemeToggleButton';
 import './App.css';
 
 function App() {
@@ -8,7 +9,8 @@ function App() {
 
   return (
     <>
-      <nav>
+      <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem' }}>
+        <ThemeToggleButton />
         {isAuthenticated ? (
           <button onClick={logout}>Déconnexion</button>
         ) : (
