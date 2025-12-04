@@ -1,14 +1,24 @@
-// src/hooks/useToggle.js
+import { useState, useEffect } from 'react';
 
-import { useState } from 'react';
+export const useToggle = (key, initialValue) => {
+  const [value, setValue] = useState(() => {
+    try {
+      const storedValue = window.localStorage.getItem(key);
 
-/**
- * Un hook personnalisé pour gérer un état booléen (on/off).
- * @param {boolean} initialValue - La valeur de départ (true ou false).
- * @returns {[boolean, () => void]} - Un tableau avec la valeur actuelle et une fonction pour la basculer.
- */
-export const useToggle = (initialValue = false) => {
-  const [value, setValue] = useState(initialValue);
+      return storedValue !== null ? JSON.parse(storedValue) : initialValue;
+    } catch (error) {
+      console.error('Erreur lors de la lecture du localStorage', error);
+      return initialValue;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      console.error('Erreur lors de l\'écriture dans le localStorage', error);
+    }
+  }, [value, key]);
 
   const toggleValue = () => {
     setValue((currentValue) => !currentValue);

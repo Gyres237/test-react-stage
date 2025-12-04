@@ -1,19 +1,41 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 import { useToggle } from '../hooks/useToggle';
 
-const ThemeContext = createContext();
+// importation des outils de theming de MUI
+import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
-export const ThemeProvider = ({ children }) => {
-  const [isDarkMode, toggleTheme] = useToggle(false); // Commence en light mode par défaut
+const ThemeToggleContext = createContext();
 
-  const value = {
-    isDarkMode,
-    toggleTheme,
-  };
+export const AppThemeProvider = ({ children }) => {
+  const [isDarkMode, toggleTheme] = useToggle('theme-mode', false);
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  
+  const theme = useMemo(() =>
+    createTheme({
+      palette: {
+        mode: isDarkMode ? 'dark' : 'light',
+      },
+    }),
+    [isDarkMode]
+  );
+
+  
+  React.useEffect(() => {
+    document.body.className = isDarkMode ? 'dark' : 'light';
+  }, [isDarkMode]);
+
+  return (
+   
+    <ThemeToggleContext.Provider value={{ toggleTheme, isDarkMode }}>
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline />
+        {children}
+      </MuiThemeProvider>
+    </ThemeToggleContext.Provider>
+  );
 };
 
-export const useTheme = () => {
-  return useContext(ThemeContext);
+export const useThemeToggle = () => {
+  return useContext(ThemeToggleContext);
 };
